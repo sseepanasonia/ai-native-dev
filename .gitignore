@@ -1,0 +1,76 @@
+# --- Workspace-level Git ignores ---
+
+# macOS / OS
+.DS_Store
+Thumbs.db
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+*.suo
+*.user
+*.userosscache
+
+# Node / frontend
+node_modules/
+dist/
+dist-ssr/
+build/
+.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.env
+.env.local
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Java / Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+
+# .NET / Visual Studio
+bin/
+obj/
+out/
+PublishOutputs/
+**/publish/
+appsettings.Development.json
+*.nupkg
+.nuget/
+
+# Docker / Compose
+docker-compose.override.yml
+docker-compose.*.yml
+
+# Logs / misc
+logs/
+*.log
+*.tmp
+*.swp
+
+# IDE-specific local files
+.vscode/
+.idea/
+
+# End
