@@ -1,54 +1,52 @@
-# Max Tokens Limit Demo: LangChain + Gemini
+# Max Tokens Limit Demo
 
-This project demonstrates how to use `max_output_tokens` to strictly limit the length of generated responses using LangChain with Google Gemini through a FastAPI web service.
+A FastAPI application demonstrating how to control response length using the max_tokens parameter.
 
 ## Objective
 
-To demonstrate the token limiting functionality that:
-- Instantiates the Gemini model with a strict token limit
-- Invokes it with prompts that would normally generate long responses
-- Shows how responses are truncated at the specified token limit
+Understand how token limits affect response length:
 
-## Conceptual Flow
-
-1. **Instantiate with Token Limit**: Create an LLM instance, setting `max_output_tokens` to a small number (e.g., 10)
-2. **Invoke with Long Prompt**: Call `.invoke()` with a prompt that asks for a detailed explanation
-3. **Observe Truncation**: Note that the response is cut off abruptly after approximately 10 tokens, demonstrating the hard limit imposed by the parameter
+- Low max_tokens: Short, concise responses
+- High max_tokens: Longer, detailed responses
+- Useful for cost control and response time optimization
 
 ## Project Structure
 
 ```
-max_tokens_limit/
+demo-04-max-token/
 ├── .env                    # Environment variables (API key)
-├── main.py                # FastAPI application
-├── pyproject.toml         # Project dependencies
-├── README.md              # This file
-└── .python-version        # Python version specification
+├── main.py                 # FastAPI application
+├── pyproject.toml          # Project dependencies
+├── README.md               # This file
+└── .python-version         # Python version specification
 ```
 
 ## Prerequisites
 
 - Python 3.12 or higher
 - [UV](https://docs.astral.sh/uv/) package manager
-- Google Gemini API key
+- LLM API key (OpenAI, Gemini, or other supported provider)
 
 ## Installation
 
 1. Navigate to the project directory:
 
    **For Linux:**
+
    ```bash
-   cd demo-4-max-token
+   cd demo-04-max-token
    ```
 
    **For Windows:**
+
    ```cmd
-   cd demo-4-max-token
+   cd demo-04-max-token
    ```
 
 2. Install dependencies using UV:
 
    **For Linux/Windows (Same command):**
+
    ```bash
    uv sync
    ```
@@ -63,37 +61,52 @@ max_tokens_limit/
 1. Create a `.env` file in the project root:
 
    **For Linux:**
+
    ```bash
    touch .env
    ```
 
    **For Windows (PowerShell):**
+
    ```powershell
    New-Item -Path .env -ItemType File
    ```
 
    **For Windows (CMD):**
+
    ```cmd
    type nul > .env
    ```
 
-2. Add your Google Gemini API key to the `.env` file:
+2. Add your LLM provider configuration to the `.env` file:
+
+   **For OpenAI:**
+
    ```
-   GEMINI_API_KEY=your_api_key_here
-   GEMINI_MODEL_NAME=gemini-2.5-flash-lite #(Model name are subject to change, please check Gemini portal before using it)
+   LLM_PROVIDER=openai
+   OPENAI_API_KEY=your_openai_api_key_here
+   OPENAI_MODEL_NAME=gpt-4o-mini
+   OPENAI_BASE_URL=https://api.openai.com/v1
+   ```
+
+   **For Gemini:**
+
+   ```
+   LLM_PROVIDER=gemini
+   GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_MODEL_NAME=gemini-2.5-flash
    GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
    ```
-   
-   **Note**: 
-   To get a Gemini API key:
-   - Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-   - Sign in with your Google account
-   - Create a new API key
-   - The GEMINI_MODEL_NAME value can be updated to any supported model. Model names may change over time, so always refer to the latest options in Google’s documentation.
+
+   **Note**:
+   - To get an API key, visit your provider's documentation
+   - The `LLM_PROVIDER` variable determines which configuration is used
+   - Model names may change over time; refer to your provider's latest documentation
 
 ## Running the Application
 
 **For Linux/Windows (Same commands):**
+
 ```bash
 uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
@@ -112,6 +125,30 @@ The application will start on `http://localhost:8000`
   }
   ```
 
+**Example Response:**
+
+```json
+{
+  "response": "Machine learning is a subset of artificial intelligence where...",
+  "model": "gpt-4o-mini",
+  "provider": "openai",
+  "max_tokens": 100
+}
+```
+
+## How Max Tokens Works
+
+The `max_tokens` parameter controls response length:
+
+1. **Token Count**: One token ≈ 4 characters on average
+2. **Hard Limit**: Responses are truncated when reaching max_tokens limit
+3. **Cost Control**: Limits API costs by preventing excessive token usage
+4. **Performance**: Shorter limits mean faster response times
+5. **Examples**:
+   - 50 tokens: Brief response (≈200 characters)
+   - 100 tokens: Standard response (≈400 characters)
+   - 200+ tokens: Detailed response (≈800+ characters)
+
 ## Features
 
 - ✅ Environment variable loading with `python-dotenv`
@@ -123,3 +160,4 @@ The application will start on `http://localhost:8000`
 
 ```
 
+```

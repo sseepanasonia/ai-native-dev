@@ -1,5 +1,5 @@
 [project]
-name = "demo-2-basic-llm-invocation-with-retry"
+name = "demo-02-basic-llm-invocation-with-retry"
 version = "0.1.0"
 description = "Basic LLM Invocation with Retry using LangChain and Gemini"
 readme = "README.md"

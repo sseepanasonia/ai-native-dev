@@ -10,30 +10,45 @@ import uvicorn
 load_dotenv()
 
 def initialize_llm():
-    """Initialize and return a ChatOpenAI (Gemini) model instance."""
-    # Get API details from environment variables
-    api_key = os.getenv("GEMINI_API_KEY")
-    model_name = os.getenv("GEMINI_MODEL_NAME")
-    base_url = os.getenv("GEMINI_BASE_URL")
-
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY environment variable is required. Please set it in your .env file.")
+    """Initialize and return a ChatOpenAI model instance.
     
-    if not base_url:
-        raise ValueError("GEMINI_BASE_URL environment variable is required. Please set it in your .env file.")
+    Supports multiple LLM providers via environment variables.
+    """
+    provider = os.getenv("LLM_PROVIDER", "openai").lower()
+    api_key = os.getenv(f"{provider.upper()}_API_KEY")
+    model_name = os.getenv(f"{provider.upper()}_MODEL_NAME")
+    base_url = os.getenv(f"{provider.upper()}_BASE_URL")
+    
+    if not api_key:
+        raise ValueError(f"{provider.upper()}_API_KEY environment variable is required.")
     
     if not model_name:
-        raise ValueError("GEMINI_MODEL_NAME environment variable is required. Please set it in your .env file.")
+        raise ValueError(f"{provider.upper()}_MODEL_NAME environment variable is required.")
     
-    # Initialize and return ChatOpenAI instance
-    return ChatOpenAI(
-        base_url=base_url,
-        model=model_name,
-        api_key=api_key
-    )
+    # base url is optional and only needed for certain providers, so we won't raise an error if it's missing. 
+    # Instead, we'll just not include it in the config.
+
+    # Generic ChatOpenAI initialization
+    config = {
+        "model": model_name,
+        "api_key": api_key,
+        "base_url": base_url  # This will be None if not set, which is fine for providers that don't require it
+    }
+    
+    # Add base_url for providers that require it
+    # base_url = os.getenv(f"{provider.upper()}_BASE_URL")
+    # if base_url:
+    #     config["base_url"] = base_url
+    
+    return ChatOpenAI(**config)
 
 # Create FastAPI app
-app = FastAPI(title="LangChain + Gemini Demo", version="1.0.0")
+provider = os.getenv("LLM_PROVIDER", "openai").lower()
+app = FastAPI(
+    title="LangChain + Multi-Provider LLM",
+    version="2.0.0",
+    description=f"Currently using {provider.upper()} provider"
+)
 # Initialize model
 llm = initialize_llm()
 
@@ -45,6 +60,7 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str
     model: str
+    provider: str
 
 
 @app.post("/chat", response_model=ChatResponse)
@@ -59,15 +75,25 @@ def chat(request: ChatRequest) -> ChatResponse:
     5. Output: Return the content of the AIMessage object
     """
     try:
-        prompt = "You are a helpful assistant. Please response to the user's message. "
-        full_prompt = f"{prompt}\n\n {request.message}\n"
-        # Step 3: Invocation - Call the .invoke() method on the instance with messages
+        prompt = "You are a helpful assistant. Please respond to the user's message."
+        full_prompt = f"{prompt}\n\nUser: {request.message}\n"
+        # Invoke the LLM
         result = llm.invoke(full_prompt)
-        # Step 4: Response Handling - LangChain parses the JSON response into AIMessage
-        # Step 5: Output - Extract content from the AIMessage object
+        # Extract content from the response
         content = result.content if hasattr(result, "content") else str(result)
-        model_name = os.getenv("GEMINI_MODEL_NAME", "unknown")
-        return ChatResponse(response=content, model=model_name)
+        
+        # Get current provider and model name
+        current_provider = os.getenv("LLM_PROVIDER", "openai").lower()
+        if current_provider == "openai":
+            model_name = os.getenv("OPENAI_MODEL_NAME", "gpt-4o-mini")
+        else:
+            model_name = os.getenv("GEMINI_MODEL_NAME", "unknown")
+        
+        return ChatResponse(
+            response=content,
+            model=model_name,
+            provider=current_provider
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 

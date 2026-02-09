@@ -1,5 +1,5 @@
 [project]
-name = "demo-4-max-token"
+name = "demo-04-max-token"
 version = "0.1.0"
 description = "Max Tokens Limit Demo: LangChain + Gemini with Token Limiting"
 readme = "README.md"

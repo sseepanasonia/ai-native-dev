@@ -1,5 +1,5 @@
 [project]
-name = "demo-5-max-tokens-and-temperature"
+name = "demo-05-max-tokens-and-temperature"
 version = "0.1.0"
 description = "Temperature and Token Experimentation with LangChain and Gemini"
 readme = "README.md"

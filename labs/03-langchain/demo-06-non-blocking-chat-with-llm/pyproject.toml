@@ -1,5 +1,5 @@
 [project]
-name = "demo-6-non-blocking-chat-with-llm"
+name = "demo-06-non-blocking-chat-with-llm"
 version = "0.1.0"
 description = "LangChain + Gemini with Async Operations"
 readme = "README.md"

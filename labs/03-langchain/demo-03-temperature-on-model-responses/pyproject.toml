@@ -1,5 +1,5 @@
 [project]
-name = "demo-3-temperature-on-model-responses"
+name = "demo-03-temperature-on-model-responses"
 version = "0.1.0"
 description = "Temperature Experiment: Demonstrating how different temperature values affect LLM outputs"
 readme = "README.md"

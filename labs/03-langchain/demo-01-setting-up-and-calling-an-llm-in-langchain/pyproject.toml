@@ -1,5 +1,5 @@
 [project]
-name = "demo-1-setting-up-and-calling-an-llm-in-langchain"
+name = "demo-01-setting-up-and-calling-an-llm-in-langchain"
 version = "0.1.0"
 description = "Setting up llm and calling llm with langchain"
 readme = "README.md"

@@ -13,18 +13,21 @@ A FastAPI application demonstrating basic LLM invocation workflow with Google's 
 1. Navigate to the project directory:
 
    **For Linux:**
+
    ```bash
-   cd demo-1-setting-up-and-calling-an-llm-in-langchain
+   cd demo-01-setting-up-and-calling-an-llm-in-langchain
    ```
 
    **For Windows:**
+
    ```cmd
-   cd demo-1-setting-up-and-calling-an-llm-in-langchain
+   cd demo-01-setting-up-and-calling-an-llm-in-langchain
    ```
 
 2. Install dependencies using UV:
 
    **For Linux/Windows (Same command):**
+
    ```bash
    uv sync
    ```
@@ -39,28 +42,32 @@ A FastAPI application demonstrating basic LLM invocation workflow with Google's 
 1. Create a `.env` file in the project root:
 
    **For Linux:**
+
    ```bash
    touch .env
    ```
 
    **For Windows (PowerShell):**
+
    ```powershell
    New-Item -Path .env -ItemType File
    ```
 
    **For Windows (CMD):**
+
    ```cmd
    type nul > .env
    ```
 
 2. Add your Google Gemini API key to the `.env` file:
+
    ```
    GEMINI_API_KEY=your_gemini_api_key_here
    GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
    GEMINI_MODEL_NAME=gemini-2.5-flash
    ```
-   
-   **Note**: 
+
+   **Note**:
    To get a Gemini API key:
    - Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
    - Sign in with your Google account
@@ -70,6 +77,7 @@ A FastAPI application demonstrating basic LLM invocation workflow with Google's 
 ## Running the Application
 
 **For Linux/Windows (Same commands):**
+
 ```bash
 uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
@@ -78,24 +86,24 @@ The application will start on `http://localhost:8000`
 
 **Note**: On Windows, you can use either PowerShell or CMD for these commands.
 
-
-
 ## API Usage
 
 **Endpoint:** `POST /chat`
 
 **Request:**
+
 ```json
 {
-    "message": "Write a short motivational quote about learning AI."
+  "message": "Write a short motivational quote about learning AI."
 }
 ```
 
 **Response:**
+
 ```json
 {
-    "response": "Your AI-generated response here...",
-    "model": "gemini-2.0-flash"
+  "response": "Your AI-generated response here...",
+  "model": "gemini-2.0-flash"
 }
 ```
 

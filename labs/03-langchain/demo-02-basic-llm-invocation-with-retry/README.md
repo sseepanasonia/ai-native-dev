@@ -1,30 +1,33 @@
 # Basic LLM Invocation with Retry
 
-A FastAPI application demonstrating basic LLM invocation workflow with retry mechanism using Google's Gemini AI model.
+A FastAPI application demonstrating LLM invocation with automatic retry mechanism for handling transient failures.
 
 ## Prerequisites
 
 - Python 3.12 or higher
 - [UV](https://docs.astral.sh/uv/) package manager
-- Google Gemini API key
+- LLM API key (OpenAI, Gemini, or other supported provider)
 
 ## Installation
 
 1. Navigate to the project directory:
 
    **For Linux:**
+
    ```bash
-   cd demo-2-basic-llm-invocation-with-retry
+   cd demo-02-basic-llm-invocation-with-retry
    ```
 
    **For Windows:**
+
    ```cmd
-   cd demo-2-basic-llm-invocation-with-retry
+   cd demo-02-basic-llm-invocation-with-retry
    ```
 
 2. Install dependencies using UV:
 
    **For Linux/Windows (Same command):**
+
    ```bash
    uv sync
    ```
@@ -39,37 +42,52 @@ A FastAPI application demonstrating basic LLM invocation workflow with retry mec
 1. Create a `.env` file in the project root:
 
    **For Linux:**
+
    ```bash
    touch .env
    ```
 
    **For Windows (PowerShell):**
+
    ```powershell
    New-Item -Path .env -ItemType File
    ```
 
    **For Windows (CMD):**
+
    ```cmd
    type nul > .env
    ```
 
-2. Add your Google Gemini API key to the `.env` file:
+2. Add your LLM provider configuration to the `.env` file:
+
+   **For OpenAI:**
+
    ```
+   LLM_PROVIDER=openai
+   OPENAI_API_KEY=your_openai_api_key_here
+   OPENAI_MODEL_NAME=gpt-4o-mini
+   OPENAI_BASE_URL=https://api.openai.com/v1
+   ```
+
+   **For Gemini:**
+
+   ```
+   LLM_PROVIDER=gemini
    GEMINI_API_KEY=your_gemini_api_key_here
    GEMINI_MODEL_NAME=gemini-2.5-flash
    GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
    ```
-   
-   **Note**: 
-   To get a Gemini API key:
-   - Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-   - Sign in with your Google account
-   - Create a new API key
-   - The GEMINI_MODEL_NAME value can be updated to any supported model. Model names may change over time, so always refer to the latest options in Google’s documentation.
+
+   **Note**:
+   - To get an API key, visit your provider's documentation
+   - The `LLM_PROVIDER` variable determines which configuration is used
+   - Model names may change over time; refer to your provider's latest documentation
 
 ## Running the Application
 
 **For Linux/Windows (Same commands):**
+
 ```bash
 uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
@@ -83,18 +101,32 @@ The application will start on `http://localhost:8000`
 **Endpoint:** `POST /chat`
 
 **Request:**
+
 ```json
 {
-    "message": "Write a short motivational quote about learning AI."
+  "message": "Write a short motivational quote about learning AI."
 }
 ```
 
 **Response:**
+
 ```json
 {
-    "response": "Your AI-generated response here...",
-    "model": "gemini-2.0-flash"
+  "response": "Your AI-generated response here...",
+  "model": "gpt-4o-mini",
+  "provider": "openai"
 }
 ```
+
+## How Retry Mechanism Works
+
+The application automatically retries failed requests with the following behavior:
+
+1. **Transient Errors**: Retries on temporary failures (HTTP 500, timeouts, etc.)
+2. **Max Retries**: Up to 2 retry attempts before returning an error
+3. **Transparent**: Retries are handled internally by LangChain
+4. **Resilience**: Improves reliability when dealing with unstable network conditions
+
+This is particularly useful in production environments where occasional service disruptions may occur.
 
 **Interactive Documentation:** http://localhost:8000/docs

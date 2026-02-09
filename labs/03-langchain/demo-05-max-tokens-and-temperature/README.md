@@ -1,53 +1,52 @@
-# Practice LO2: Temperature and Token Experimentation
+# Temperature and Token Experimentation
 
-This project demonstrates how to experiment with both temperature and max_output_tokens parameters using LangChain with Google Gemini through a FastAPI web service.
+A FastAPI application demonstrating how temperature and max_tokens parameters work together to control LLM response characteristics.
 
 ## Objective
 
-To create a script that allows for experimentation with both temperature and max_output_tokens parameters to understand their effects on AI model responses.
+Understand how combining temperature and token limits creates different response outcomes:
 
-## Requirements Implementation
-
-1. **Create practice_lo2.py**: FastAPI-based implementation
-2. **Import necessary libraries**: LangChain, FastAPI, Pydantic, dotenv
-3. **Define generate_response function**: Takes prompt, temperature, and max_tokens
-4. **Three LLM initialization functions**: Each with different parameter combinations
-5. **Main experimentation**: Three different parameter combinations in one endpoint
+- Low temperature + high tokens: Focused and detailed responses
+- High temperature + high tokens: Creative and lengthy responses
+- Medium temperature + low tokens: Balanced but brief responses
 
 ## Project Structure
 
 ```
-practice_lo2/
+demo-05-max-tokens-and-temperature/
 ├── .env                    # Environment variables (API key)
-├── main.py                # FastAPI application
-├── pyproject.toml         # Project dependencies
-├── README.md              # This file
-└── .python-version        # Python version specification
+├── main.py                 # FastAPI application
+├── pyproject.toml          # Project dependencies
+├── README.md               # This file
+└── .python-version         # Python version specification
 ```
 
 ## Prerequisites
 
 - Python 3.12 or higher
 - [UV](https://docs.astral.sh/uv/) package manager
-- Google Gemini API key
+- LLM API key (OpenAI, Gemini, or other supported provider)
 
 ## Installation
 
 1. Navigate to the project directory:
 
    **For Linux:**
+
    ```bash
-   cd demo-5-max-tokens-and-temperature
+   cd demo-05-max-tokens-and-temperature
    ```
 
    **For Windows:**
+
    ```cmd
-   cd demo-5-max-tokens-and-temperature
+   cd demo-05-max-tokens-and-temperature
    ```
 
 2. Install dependencies using UV:
 
    **For Linux/Windows (Same command):**
+
    ```bash
    uv sync
    ```
@@ -62,37 +61,52 @@ practice_lo2/
 1. Create a `.env` file in the project root:
 
    **For Linux:**
+
    ```bash
    touch .env
    ```
 
    **For Windows (PowerShell):**
+
    ```powershell
    New-Item -Path .env -ItemType File
    ```
 
    **For Windows (CMD):**
+
    ```cmd
    type nul > .env
    ```
 
-2. Add your Google Gemini API key to the `.env` file:
+2. Add your LLM provider configuration to the `.env` file:
+
+   **For OpenAI:**
+
    ```
-   GEMINI_API_KEY=your_api_key_here
-   GEMINI_MODEL_NAME=gemini-2.5-flash-lite #(Model Subject to Change, please Check Gemini portal for latest version)
+   LLM_PROVIDER=openai
+   OPENAI_API_KEY=your_openai_api_key_here
+   OPENAI_MODEL_NAME=gpt-4o-mini
+   OPENAI_BASE_URL=https://api.openai.com/v1
+   ```
+
+   **For Gemini:**
+
+   ```
+   LLM_PROVIDER=gemini
+   GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_MODEL_NAME=gemini-2.5-flash
    GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
    ```
-   
-   **Note**: 
-   To get a Gemini API key:
-   - Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-   - Sign in with your Google account
-   - Create a new API key
-   - The GEMINI_MODEL_NAME value can be updated to any supported model. Model names may change over time, so always refer to the latest options in Google’s documentation.
+
+   **Note**:
+   - To get an API key, visit your provider's documentation
+   - The `LLM_PROVIDER` variable determines which configuration is used
+   - Model names may change over time; refer to your provider's latest documentation
 
 ## Running the Application
 
 **For Linux/Windows (Same commands):**
+
 ```bash
 uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
@@ -119,25 +133,27 @@ The application will start on `http://localhost:8000`
 ## Three LLM Initialization Functions
 
 ### 1. `initialize_low_temp_high_tokens_model()`
+
 - **Temperature**: 0.2 (focused, deterministic)
 - **Max Tokens**: 100 (detailed response)
 - **Purpose**: Produces focused, detailed, and consistent responses
 
 ### 2. `initialize_high_temp_high_tokens_model()`
+
 - **Temperature**: 1.0 (creative, random)
 - **Max Tokens**: 100 (detailed response)
 - **Purpose**: Produces creative, varied, and unpredictable responses
 
 ### 3. `initialize_medium_temp_low_tokens_model()`
+
 - **Temperature**: 0.5 (balanced)
 - **Max Tokens**: 100 (very short response)
 - **Purpose**: Produces truncated, concise responses that end abruptly
 
-
-
 ## Use Cases
 
 This parameter experimentation is useful for:
+
 - **Content Generation**: Finding the right balance of creativity vs consistency
 - **Response Length Control**: Matching output to UI constraints
 - **A/B Testing**: Comparing different parameter combinations

@@ -1,56 +1,53 @@
-# Single Async Call Demo: LangChain + Gemini
+# Non-Blocking Chat with Async LLM
 
-This project demonstrates the basic syntax for making a single async call using LangChain with Google Gemini through a FastAPI web service.
+A FastAPI application demonstrating asynchronous LLM calls using async/await pattern for non-blocking operations.
 
 ## Objective
 
-To demonstrate the async workflow that:
-- Defines a coroutine using `async def`
-- Instantiates the ChatGoogleGenerativeAI instance
-- Uses `.ainvoke()` method with `await` keyword
-- Executes the coroutine with asyncio
+Learn how to use async/await for non-blocking LLM calls:
 
-## Conceptual Flow
-
-1. **Define Coroutine**: Create a function using `async def`
-2. **Instantiate LLM**: Create the ChatOpenAI instance as usual
-3. **Await ainvoke**: Inside the coroutine, call the `.ainvoke()` method and use the `await` keyword to pause until the result is returned
-4. **Run with asyncio**: Use `asyncio.run()` to execute the top-level coroutine
+- Define coroutines with async def
+- Use .ainvoke() with await keyword
+- Handle concurrent requests efficiently
+- Improve application responsiveness
 
 ## Project Structure
 
 ```
-single_async_call/
+demo-06-non-blocking-chat-with-llm/
 ├── .env                    # Environment variables (API key)
-├── main.py                # FastAPI application
-├── pyproject.toml         # Project dependencies
-├── README.md              # This file
-└── .python-version        # Python version specification
+├── main.py                 # FastAPI application
+├── pyproject.toml          # Project dependencies
+├── README.md               # This file
+└── .python-version         # Python version specification
 ```
 
 ## Prerequisites
 
 - Python 3.12 or higher
 - [UV](https://docs.astral.sh/uv/) package manager
-- Google Gemini API key
+- LLM API key (OpenAI, Gemini, or other supported provider)
 
 ## Installation
 
 1. Navigate to the project directory:
 
    **For Linux:**
+
    ```bash
-   cd demo-6-non-blocking-chat-with-llm
+   cd demo-06-non-blocking-chat-with-llm
    ```
 
    **For Windows:**
+
    ```cmd
-   cd demo-6-non-blocking-chat-with-llm
+   cd demo-06-non-blocking-chat-with-llm
    ```
 
 2. Install dependencies using UV:
 
    **For Linux/Windows (Same command):**
+
    ```bash
    uv sync
    ```
@@ -65,37 +62,52 @@ single_async_call/
 1. Create a `.env` file in the project root:
 
    **For Linux:**
+
    ```bash
    touch .env
    ```
 
    **For Windows (PowerShell):**
+
    ```powershell
    New-Item -Path .env -ItemType File
    ```
 
    **For Windows (CMD):**
+
    ```cmd
    type nul > .env
    ```
 
-2. Add your Google Gemini API key to the `.env` file:
+2. Add your LLM provider configuration to the `.env` file:
+
+   **For OpenAI:**
+
    ```
-   GEMINI_API_KEY=your_api_key_here
-   GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+   LLM_PROVIDER=openai
+   OPENAI_API_KEY=your_openai_api_key_here
+   OPENAI_MODEL_NAME=gpt-4o-mini
+   OPENAI_BASE_URL=https://api.openai.com/v1
+   ```
+
+   **For Gemini:**
+
+   ```
+   LLM_PROVIDER=gemini
+   GEMINI_API_KEY=your_gemini_api_key_here
    GEMINI_MODEL_NAME=gemini-2.5-flash
+   GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
    ```
-   
-   **Note**: 
-   To get a Gemini API key:
-   - Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-   - Sign in with your Google account
-   - Create a new API key
-   - The GEMINI_MODEL_NAME value can be updated to any supported model. Model names may change over time, so always refer to the latest options in Google’s documentation.
+
+   **Note**:
+   - To get an API key, visit your provider's documentation
+   - The `LLM_PROVIDER` variable determines which configuration is used
+   - Model names may change over time; refer to your provider's latest documentation
 
 ## Running the Application
 
 **For Linux/Windows (Same commands):**
+
 ```bash
 uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
@@ -107,32 +119,43 @@ The application will start on `http://localhost:8000`
 ## Testing the API
 
 - Open your browser to `http://localhost:8000/docs` for interactive API documentation
-- Send POST requests to `http://localhost:8000/async-chat`
+- Or send a POST request to `http://localhost:8000/async-chat`:
 
-## Features
+**Example Request:**
 
-- ✅ Environment variable loading with `python-dotenv`
-- ✅ ChatOpenAI instantiation for "gemini-2.0-flash" model
-- ✅ **Async coroutine definition** using `async def`
-- ✅ **Async LLM invocation** using `.ainvoke()` with `await`
-- ✅ FastAPI web service with automatic API documentation
-- ✅ **Asyncio integration** for async operations
-- ✅ Interactive API testing via Swagger UI
-
-## API Endpoint
-
-### POST /async-chat
-
-Make a single async call to the Gemini model.
-
-**Request Body:**
 ```json
 {
-  "message": "Your message here"
+  "message": "Write a short poem about learning async programming"
 }
 ```
 
-**Response:**
+**Example Response:**
+
+```json
+{
+  "response": "In the realm where tasks dance free...",
+  "model": "gpt-4o-mini",
+  "provider": "openai",
+  "execution_type": "async"
+}
+```
+
+## Async Programming Pattern
+
+The application demonstrates the async/await pattern:
+
+1. **Define Coroutine**: Use `async def` to create an async function
+2. **Instantiate LLM**: Create ChatOpenAI instance (works with both sync and async)
+3. **Await ainvoke**: Call `.ainvoke()` with `await` keyword inside async function
+4. **Execute with asyncio**: Use `asyncio.run()` to execute the coroutine
+
+Benefits:
+
+- **Non-blocking**: Doesn't freeze the application during API calls
+- **Concurrent**: Can handle multiple requests simultaneously
+- **Efficient**: Better resource utilization with high-traffic scenarios
+- **Scalable**: Foundation for production-grade applications
+
 ```json
 {
   "response": "Generated response from async call...",
@@ -140,4 +163,3 @@ Make a single async call to the Gemini model.
   "execution_type": "async"
 }
 ```
-

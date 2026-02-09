@@ -1,48 +1,54 @@
 import os
 from fastapi import FastAPI, HTTPException
-from dotenv import load_dotenv
 from pydantic import BaseModel
-import uvicorn
+from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+import uvicorn
 
 
-# Load environment variables
+# Load environment variables from .env file
 load_dotenv()
 
-
-def initialize_gemini_llm_with_retry() -> ChatOpenAI:
-    """
-    Initialize a LangChain ChatOpenAI client with retry mechanism.
+def initialize_llm() -> ChatOpenAI:
+    """Initialize and return a ChatOpenAI model instance with retry mechanism.
     
-    This demonstrates the enhanced LLM invocation workflow with retry:
-    1. Environment Setup: Load the GEMINI_API_KEY from .env file
-    2. Instantiation with Retries: Create ChatOpenAI with max_retries parameter
-    3. The .invoke() method will automatically handle retries on failures
-
-    Requires the following environment variables in .env:
-      - GEMINI_API_KEY
+    Supports multiple LLM providers via environment variables.
+    
+    The retry mechanism provides resilience against transient failures:
+    1. max_retries: Automatically retries failed requests
+    2. Handles transient errors (HTTP 500, timeouts, etc.)
+    3. Returns successful response after retry attempt
     """
-    api_key = os.getenv("GEMINI_API_KEY")
-    model_name = os.getenv("GEMINI_MODEL_NAME")
-    base_url = os.getenv("GEMINI_BASE_URL")
-
+    provider = os.getenv("LLM_PROVIDER", "openai").lower()
+    api_key = os.getenv(f"{provider.upper()}_API_KEY")
+    model_name = os.getenv(f"{provider.upper()}_MODEL_NAME")
+    base_url = os.getenv(f"{provider.upper()}_BASE_URL")
+    
     if not api_key:
-        raise ValueError("GEMINI_API_KEY is not set. Please configure it in your .env file.")
+        raise ValueError(f"{provider.upper()}_API_KEY environment variable is required.")
+    
     if not model_name:
-        raise ValueError("GEMINI_MODEL_NAME is not set. Please configure it in your .env file.")
-    if not base_url:
-        raise ValueError("GEMINI_BASE_URL is not set. Please configure it in your .env file.")
-    # ChatOpenAI with retry mechanism
-    return ChatOpenAI(
-        model=model_name,
-        api_key=api_key,
-        base_url=base_url,
-        max_retries=2,  # Retry up to 2 times on failure
-    )
+        raise ValueError(f"{provider.upper()}_MODEL_NAME environment variable is required.")
+    
+    # Generic ChatOpenAI initialization with retry support
+    config = {
+        "model": model_name,
+        "api_key": api_key,
+        "base_url": base_url,
+        "max_retries": 2,  # Retry up to 2 times on failure
+    }
+    
+    return ChatOpenAI(**config)
 
-
-app = FastAPI(title="LangChain + Gemini with Retry Demo", version="1.0.0")
-llm = initialize_gemini_llm_with_retry()
+# Create FastAPI app
+provider = os.getenv("LLM_PROVIDER", "openai").lower()
+app = FastAPI(
+    title="LangChain + Multi-Provider LLM with Retry",
+    version="2.0.0",
+    description=f"LLM invocation with automatic retry mechanism. Currently using {provider.upper()} provider"
+)
+# Initialize model
+llm = initialize_llm()
 
 
 class ChatRequest(BaseModel):
@@ -52,33 +58,44 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str
     model: str
+    provider: str
 
 
 @app.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest) -> ChatResponse:
     """
-    Basic LLM invocation endpoint with retry mechanism demonstrating the enhanced workflow:
+    Demonstrate LLM invocation with automatic retry mechanism.
     
-    1. Environment Setup: GEMINI_API_KEY loaded from .env file
+    Workflow:
+    1. Environment Setup: Load API key and model configuration from .env
     2. Instantiation with Retries: ChatOpenAI created with max_retries=2
-    3. Invocation: Call the .invoke() method with system prompt and user message
-    4. Error Handling (Internal): LangChain automatically retries on retriable errors (HTTP 500, etc.)
-    5. Output: Return the final AIMessage content after successful retry attempts
+    3. Invocation: Call the .invoke() method with prompt and message
+    4. Automatic Retries: LangChain automatically retries on transient failures
+    5. Response Handling: Extract and return content from successful attempt
+    
+    The retry mechanism helps handle temporary service disruptions without user intervention.
     """
     try:
-        # Step 3: Invocation - Call the .invoke() method with system prompt and message
-        system_prompt = "You are a helpful assistant. Please response to the user's message."
-        full_prompt = f"{system_prompt}\n\n {request.message}\n"
+        prompt = "You are a helpful assistant. Please respond to the user's message."
+        full_prompt = f"{prompt}\n\nUser: {request.message}\n"
+        
+        # Invoke the LLM (retries are automatic)
         result = llm.invoke(full_prompt)
         
-        # Step 4 & 5: Response Handling and Output - Extract content from AIMessage
+        # Extract content from the response
         content = result.content if hasattr(result, "content") else str(result)
-        model_name = os.getenv("GEMINI_MODEL_NAME")
-        return ChatResponse(response=content, model=model_name)
+        
+        # Get current provider and model name
+        current_provider = os.getenv("LLM_PROVIDER", "openai").lower()
+        if current_provider == "openai":
+            model_name = os.getenv("OPENAI_MODEL_NAME", "gpt-4o-mini")
+        else:
+            model_name = os.getenv("GEMINI_MODEL_NAME", "unknown")
+        
+        return ChatResponse(
+            response=content,
+            model=model_name,
+            provider=current_provider
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
-
-
-if __name__ == "__main__":
-    
-    uvicorn.run(app, host="0.0.0.0", port=8000)
