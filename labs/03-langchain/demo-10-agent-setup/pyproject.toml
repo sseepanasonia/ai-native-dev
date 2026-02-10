@@ -1,5 +1,5 @@
 [project]
-name = "demo-5-agent-executor-setup"
+name = "demo-10-agent-executor-setup"
 version = "0.1.0"
 description = "Modern LangChain Agent Executor Example"
 requires-python = ">=3.10"

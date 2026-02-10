@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.10"
 resolution-markers = [
     "python_full_version >= '3.13'",
@@ -308,7 +308,7 @@ wheels = [
 ]
 
 [[package]]
-name = "demo-5-agent-executor-setup"
+name = "demo-10-agent-executor-setup"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

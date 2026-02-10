@@ -1,5 +1,5 @@
 [project]
-name = "demo-1-greeting-tool"
+name = "demo-08-greeting-tool"
 version = "0.1.0"
 description = "A FastAPI application demonstrating LangChain tool integration with Google Generative AI."
 readme = "README.md"

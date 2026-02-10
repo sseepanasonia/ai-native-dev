@@ -111,7 +111,7 @@ wheels = [
 ]
 
 [[package]]
-name = "demo-4-build-an-external-api-tool-for-geolocation"
+name = "demo-09-build-an-external-api-tool-for-geolocation"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

@@ -1,5 +1,5 @@
 [project]
-name = "demo-4-build-an-external-api-tool-for-geolocation"
+name = "demo-09-build-an-external-api-tool-for-geolocation"
 version = "0.1.0"
 description = "A FastAPI application that demonstrates how to create and use external tools with LangChain. This demo fetches a user's geographical location based on their IP address using the apiip.net service."
 readme = "README.md"
