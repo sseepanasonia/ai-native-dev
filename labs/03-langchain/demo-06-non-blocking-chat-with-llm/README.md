@@ -32,7 +32,7 @@ demo-06-non-blocking-chat-with-llm/
 
 1. Navigate to the project directory:
 
-   **For Linux:**
+   **For Linux/macOS:**
 
    ```bash
    cd demo-06-non-blocking-chat-with-llm
@@ -56,6 +56,28 @@ demo-06-non-blocking-chat-with-llm/
    - Create a virtual environment
    - Install all dependencies from `pyproject.toml`
    - Set up the project environment
+
+3. Activate the virtual environment:
+
+   **For Linux/macOS:**
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+   **For Windows (PowerShell):**
+
+   ```powershell
+   .venv\Scripts\Activate.ps1
+   ```
+
+   **For Windows (CMD):**
+
+   ```cmd
+   .venv\Scripts\activate.bat
+   ```
+
+   **Note**: If using `uv run` command (as shown in Running section), activation is optional as `uv run` automatically uses the virtual environment.
 
 ## Configuration
 

@@ -27,7 +27,7 @@ This example classifies customer queries as either **TECHNICAL** or **GENERAL** 
 
 1. Navigate to the project directory:
 
-   **For Linux:**
+   **For Linux/macOS:**
 
    ```bash
    cd demo-16-simple-router-chain-api
@@ -52,13 +52,35 @@ This example classifies customer queries as either **TECHNICAL** or **GENERAL** 
    - Install all dependencies from `pyproject.toml`
    - Set up the project environment
 
+3. Activate the virtual environment:
+
+   **For Linux/macOS:**
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+   **For Windows (PowerShell):**
+
+   ```powershell
+   .venv\Scripts\Activate.ps1
+   ```
+
+   **For Windows (CMD):**
+
+   ```cmd
+   .venv\Scripts\activate.bat
+   ```
+
+   **Note**: If using `uv run` command (as shown in Running section), activation is optional as `uv run` automatically uses the virtual environment.
+
 ---
 
 ## Configuration
 
 1. Create a `.env` file in the project root:
 
-   **For Linux:**
+   **For Linux/macOS:**
 
    ```bash
    touch .env
@@ -76,20 +98,30 @@ This example classifies customer queries as either **TECHNICAL** or **GENERAL** 
    type nul > .env
    ```
 
-2. Add your Gemini API credentials to the `.env` file:
+2. Add your API configuration to the `.env` file:
 
+   **For OpenAI:**
+
+   ```env
+   LLM_PROVIDER=openai
+   OPENAI_API_KEY=your_openai_api_key_here
+   OPENAI_MODEL_NAME=gpt-4o-mini
    ```
+
+   **For Google Gemini:**
+
+   ```env
+   LLM_PROVIDER=gemini
    GEMINI_API_KEY=your_gemini_api_key_here
    GEMINI_MODEL_NAME=gemini-2.5-flash
    GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
    ```
 
-   **Note**:
-   To get a Gemini API key:
-   - Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-   - Sign in with your Google account
-   - Create a new API key
-   - The GEMINI_MODEL_NAME value can be updated to any supported model. Model names may change over time, so always refer to the latest options in Google’s documentation.
+   **How to get API keys:**
+   - **OpenAI**: Visit [OpenAI API Keys](https://platform.openai.com/api-keys)
+   - **Gemini**: Visit [Google AI Studio](https://aistudio.google.com/app/apikey)
+
+   **Note**: The model names can be updated to any supported model. Model names may change over time, so always refer to the latest options in the provider's documentation.
 
 ---
 

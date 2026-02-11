@@ -12,7 +12,7 @@ A FastAPI application demonstrating LLM invocation with automatic retry mechanis
 
 1. Navigate to the project directory:
 
-   **For Linux:**
+   **For Linux/macOS:**
 
    ```bash
    cd demo-02-basic-llm-invocation-with-retry
@@ -37,11 +37,33 @@ A FastAPI application demonstrating LLM invocation with automatic retry mechanis
    - Install all dependencies from `pyproject.toml`
    - Set up the project environment
 
+3. Activate the virtual environment:
+
+   **For Linux/macOS:**
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+   **For Windows (PowerShell):**
+
+   ```powershell
+   .venv\Scripts\Activate.ps1
+   ```
+
+   **For Windows (CMD):**
+
+   ```cmd
+   .venv\Scripts\activate.bat
+   ```
+
+   **Note**: If using `uv run` command (as shown in Running section), activation is optional as `uv run` automatically uses the virtual environment.
+
 ## Configuration
 
 1. Create a `.env` file in the project root:
 
-   **For Linux:**
+   **For Linux/macOS:**
 
    ```bash
    touch .env
@@ -86,7 +108,7 @@ A FastAPI application demonstrating LLM invocation with automatic retry mechanis
 
 ## Running the Application
 
-**For Linux/Windows (Same commands):**
+**For Linux/macOS/Windows:**
 
 ```bash
 uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload

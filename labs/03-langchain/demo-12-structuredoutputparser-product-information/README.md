@@ -5,6 +5,7 @@ A FastAPI application demonstrating how to use LangChain's `StructuredOutputPars
 ## Objective
 
 To demonstrate the StructuredOutputParser workflow:
+
 1. **Define Response Schemas**: Create structured data schemas using ResponseSchema
 2. **Initialize Parser**: Use StructuredOutputParser with the response schemas
 3. **Generate Format Instructions**: Get structured prompt instructions for the LLM
@@ -26,27 +27,67 @@ structured_output_parser_demo/
 ## Setup Instructions
 
 1. **Install Dependencies**
+
    ```bash
    uv sync
    ```
 
-2. **Environment Configuration**
-   Create a `.env` file in the project root:
-   ```env
-   GEMINI_API_KEY=your_gemini_api_key_here
-   GEMINI_BASE_URL= https://generativelanguage.googleapis.com/v1beta/openai/
-   GEMINI_MODEL_NAME= gemini-2.5-flash
-   ```
-   **Note:**
-   - The GEMINI_MODEL_NAME value can be updated to any supported model. Model names may change over time, so always refer to the latest options in Google’s documentation.   
-   - Get your API key: [Google AI Studio](https://aistudio.google.com/)
+2. **Activate the virtual environment:**
 
-3. **Run the FastAPI Server**
+   **For Linux/macOS:**
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+   **For Windows (PowerShell):**
+
+   ```powershell
+   .venv\Scripts\Activate.ps1
+   ```
+
+   **For Windows (CMD):**
+
+   ```cmd
+   .venv\Scripts\activate.bat
+   ```
+
+   **Note**: If using `uv run` command (as shown in Running section), activation is optional as `uv run` automatically uses the virtual environment.
+
+3. **Environment Configuration**
+   Create a `.env` file in the project root:
+
+   **For OpenAI:**
+
+   ```env
+   LLM_PROVIDER=openai
+   OPENAI_API_KEY=your_openai_api_key_here
+   OPENAI_MODEL_NAME=gpt-4o-mini
+   ```
+
+   **For Google Gemini:**
+
+   ```env
+   LLM_PROVIDER=gemini
+   GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+   GEMINI_MODEL_NAME=gemini-2.5-flash
+   ```
+
+   **How to get API keys:**
+   - **OpenAI**: Visit [OpenAI API Keys](https://platform.openai.com/api-keys)
+   - **Gemini**: Visit [Google AI Studio](https://aistudio.google.com/app/apikey)
+
+   **Note:**
+   - The model names can be updated to any supported model. Model names may change over time, so always refer to the latest options in the provider's documentation.
+
+4. **Run the FastAPI Server**
+
    ```bash
    uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
    ```
 
-4. **Test the API**
+5. **Test the API**
    - Open your browser to `http://localhost:8000/docs` for interactive API documentation
    - Or send POST requests to the extract_product_info endpoint
 
@@ -64,9 +105,11 @@ structured_output_parser_demo/
 ## API Endpoints
 
 ### POST /extract_product_info
+
 Extract product information from product page text.
 
 **Request Body:**
+
 ```json
 {
   "product_page_text": "iPhone 15 Pro Max - $1199 - Available in stock with free shipping"
@@ -74,6 +117,7 @@ Extract product information from product page text.
 ```
 
 **Response:**
+
 ```json
 {
   "product_name": "iPhone 15 Pro Max",
@@ -81,6 +125,7 @@ Extract product information from product page text.
   "in_stock": true
 }
 ```
+
 ## Implementation notes
 
 Implementation-specific code and detailed internal examples have been removed from this README for brevity. If you want to see the actual implementation, please check the `main.py` source in this folder.
@@ -88,6 +133,7 @@ Implementation-specific code and detailed internal examples have been removed fr
 ## Interactive Documentation
 
 Visit `http://localhost:8000/docs` for interactive API documentation with:
+
 - Try-it-out functionality
 - Request/response schemas
 - Example requests and responses
@@ -115,7 +161,7 @@ When you test the extract_product_info endpoint, you'll observe:
 ## Expected Output
 
 When you run the server and test the `/extract_product_info` endpoint, you'll receive:
+
 - A JSON response with structured product information
 - Extracted fields matching the defined schema
 - Interactive API documentation at `/docs`
-

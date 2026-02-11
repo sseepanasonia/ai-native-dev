@@ -44,6 +44,28 @@ A FastAPI application demonstrating LangChain tool integration with structured r
    - Install all dependencies from `pyproject.toml`
    - Set up the project environment
 
+3. Activate the virtual environment:
+
+   **For Linux/macOS:**
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+   **For Windows (PowerShell):**
+
+   ```powershell
+   .venv\Scripts\Activate.ps1
+   ```
+
+   **For Windows (CMD):**
+
+   ```cmd
+   .venv\Scripts\activate.bat
+   ```
+
+   **Note**: If using `uv run` command (as shown in Running section), activation is optional as `uv run` automatically uses the virtual environment.
+
 ## Running the Application
 
 **For Linux/macOS/Windows:**

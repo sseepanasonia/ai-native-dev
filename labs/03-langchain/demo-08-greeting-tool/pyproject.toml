@@ -5,8 +5,7 @@ description = "A FastAPI application demonstrating LangChain tool integration wi
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi==0.121.0",
-	"uvicorn[standard]==0.38.0",
-    "langchain==1.0.0",
-    "langchain-core==1.0.1",
+    "fastapi==0.128.0",
+    "uvicorn==0.40.0",
+    "langchain==1.2.8",
 ]

@@ -46,6 +46,28 @@ A FastAPI application demonstrating how to create and integrate external API too
    - Install all dependencies from `pyproject.toml`
    - Set up the project environment
 
+3. Activate the virtual environment:
+
+   **For Linux/macOS:**
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+   **For Windows (PowerShell):**
+
+   ```powershell
+   .venv\Scripts\Activate.ps1
+   ```
+
+   **For Windows (CMD):**
+
+   ```cmd
+   .venv\Scripts\activate.bat
+   ```
+
+   **Note**: If using `uv run` command (as shown in Running section), activation is optional as `uv run` automatically uses the virtual environment.
+
 ## Configuration
 
 1. Create or update your `.env` file in the project root with your apiip.net API key:
