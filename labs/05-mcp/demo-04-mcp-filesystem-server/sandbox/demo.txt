@@ -1,0 +1,14 @@
+Welcome to the MCP Filesystem Demo!
+
+This file demonstrates the file operations available through the MCP server.
+
+You can:
+- Read this file
+- Write new files
+- List directory contents
+- Search for files by pattern
+
+Try these demo operations:
+1. read_file("sandbox/demo.txt")
+2. list_directory("sandbox")
+3. search_files("*.txt", "sandbox")

@@ -1,0 +1,10 @@
+[project]
+name = "demo-04-mcp-filesystem-server"
+version = "0.1.0"
+description = "MCP server for secure filesystem operations with path validation"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=0.1.0",
+    "aiofiles>=23.0.0",
+]

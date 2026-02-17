@@ -1,0 +1,9 @@
+[project]
+name = "demo-01-basic-mcp-stdio"
+version = "0.1.0"
+description = "Introduction to MCP protocol with basic server and client using stdio transport"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=0.1.0",
+]
